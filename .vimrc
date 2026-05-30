@@ -212,6 +212,8 @@ augroup init
     autocmd Filetype java set tags=$JAVA_HOME/tags,./tags,tags;
     " c,cpp配置
     autocmd FileType c,cpp map <buffer> <leader><space> :w<cr>:make<cr>
+    autocmd FileType c,cpp map <buffer> <leader>b :w<cr>:CMakeBuild<cr>
+    autocmd FileType c,cpp map <buffer> <leader>r :w<cr>:CMakeRun<cr>
     " 文件名补全-当前文件目录
     autocmd InsertEnter * let save_cwd = getcwd() | set autochdir
     autocmd InsertLeave * set noautochdir | execute 'cd' fnameescape(save_cwd)
@@ -255,6 +257,7 @@ Plugin 'VundleVim/Vundle.vim'
 
 " 主题风格插件
 Plugin 'tomasr/molokai'
+" Plugin 'altercation/vim-colors-solarized'
 " 状态栏插件
 "Plugin 'Lokaltog/vim-powerline'
 "let g:Powerline_symbols = 'fancy'
@@ -472,11 +475,12 @@ Plugin 'aserebryakov/vim-todo-lists'
 "Plugin 'davidhalter/jedi-vim'
 "let g:jedi#force_py_version=2
 
-Plugin 'yuratomo/w3m.vim'
+"Plugin 'yuratomo/w3m.vim'
 
 Plugin 'file:///~/.vim/bundle/potion'
 
 Plugin 'file:///~/.vim/bundle/YouCompleteMe'
+let g:ycm_key_invoke_completion = '<c-y>'
 " Track the engine.
 Plugin 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
@@ -484,6 +488,9 @@ Plugin 'honza/vim-snippets'
 " YCM
 " 开启 YCM 标签补全引擎
 let g:ycm_collect_identifiers_from_tags_files=1
+" YCM自动关闭预览方法出口
+" https://stackoverflow.com/questions/38534285/vim-youcompleteme-plugin-opens-up-a-split-window-with-function-definition
+let g:ycm_autoclose_preview_window_after_insertion=1
 " 从第一个键入字符就开始罗列匹配项
 let g:ycm_min_num_of_chars_for_completion=1
 " 语法关键字补全
@@ -500,6 +507,8 @@ let g:UltiSnipsExpandTrigger           = '<tab>'
 " let g:UltiSnipsJumpBackwardTrigger     = '<s-tab>'
 let g:ycm_key_list_select_completion   = ['<C-j>', '<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-k>', '<C-p>', '<Up>']
+" 关闭加载.ycm_extra_conf.py文件提醒
+let g:ycm_confirm_extra_conf = 0
 let g:ycm_semantic_triggers =  {
   \   'c' : ['->', '.', 're!\w+', 're!\w+',
   \             're!\[.*\]\s'],
@@ -514,6 +523,10 @@ let g:ycm_semantic_triggers =  {
   \   'lua' : ['.', ':'],
   \   'erlang' : [':'],
   \ }
+
+" python ycm配置
+" let g:ycm_python_interpreter_path = '/Users/shifanhuang/.pyenv/versions/3.10.13/bin/python'
+let g:ycm_global_ycm_extra_conf = '~/global_extra_conf.py'
 
 
 
@@ -559,6 +572,18 @@ Plugin 'tpope/vim-dadbod'
 Plugin 'kristijanhusak/vim-dadbod-ui'
 let g:db_ui_winwidth=45
 
+Plugin 'ilyachur/cmake4vim'
+let g:cmake_vimspector_support=1
+let g:cmake_build_type='Debug'
+
+
+" debug 工具
+Plugin 'puremourning/vimspector'
+let g:vimspector_enable_mappings='HUMAN'
+
+
+Plugin 'indentpython'
+
 call vundle#end()
 " 根据侦测到的不同类型加载对应的插件
 filetype plugin on
@@ -583,3 +608,10 @@ colorscheme molokai
 " nnoremap <C-n> :call NumberToggle()<cr>
 
 " }}}
+
+
+" 允许 Vim 自动加载当前目录的 .vimrc / .exrc
+set exrc
+" 阻止危险命令（避免安全风险）
+set secure
+
